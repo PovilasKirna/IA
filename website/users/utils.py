@@ -1,5 +1,5 @@
 import secrets, os
-from flask import url_for, current_app, redirect
+from flask import url_for, current_app, redirect, abort
 from .. import mail
 from flask_mail import Message
 from PIL import Image
@@ -27,6 +27,16 @@ def elligible(curr_user):
         def wrapper(*args, **kwargs):
             if not curr_user.registered:
                 return redirect(url_for('users.registered'))
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+def roleRequired(curr_user, role):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not curr_user.role == role:
+                abort(403)
             return func(*args, **kwargs)
         return wrapper
     return decorator
