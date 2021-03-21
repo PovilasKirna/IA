@@ -1,0 +1,75 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+        <div class="text-center">
+                {% if users %}
+                    <h3>There are users who recently registered and are waiting for approval.</h3>
+                {% else %}
+                <div class="card text-center">
+                    <h1>No new users</h1>
+                    <div class="card-body">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="active">
+                                <a class="nav-link" style="color: grey; " href="/admin/">
+                                </li>
+                                Home</a>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/user/">
+                                  User</a>
+                                </li>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/class/">
+                                  Class</a>
+                                </li>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/pupil/">
+                                  Pupil</a>
+                                </li>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/proposal/">
+                                  Proposal</a>
+                                </li>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/classevent/">
+                                  Class Event</a>
+                                </li>
+                                    <li>
+                                <a class="nav-link" style="color: grey; " href="/admin/parent/">
+                                  Parent</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" style="color: grey; " href="/logout">Logout</a>
+                                </li>
+                            </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% for user in users %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>{{user.name}} {{user.surname}}</h1>
+                    <br>
+                    <h3>Email address:</h3>
+                    <p>
+                        {{user.email}}
+                    </p>
+                    <br>
+                    <h3>Phone:</h3>
+                    <p>
+                        {{user.phone}}
+                    </p>
+                    <br>
+                    <h3>Registered:</h3>
+                    <p>
+                        {{user.registered}}
+                    </p>
+                </div>
+                  </div>
+                <div class="text-center">
+                    <a class="btn btn-outline-success" href="/admin/user/edit/?id={{user.id}}">Register</a>
+                </div>
+            {% endfor %}
+</div>
+{% endblock %}

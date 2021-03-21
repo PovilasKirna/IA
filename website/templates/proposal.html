@@ -1,0 +1,71 @@
+{% extends 'main.html'%}
+{% block title %}Proposal "{{proposal.name}}"{% endblock %}
+{% block content %}
+<div>
+    <div class="card">
+        <div class="card-body">
+            <h1>Proposal "{{proposal.name}}"</h1>
+            <br>
+            <h3>Description:</h3>
+            <p>
+                {{proposal.description}}
+            </p>
+            <br>
+            <h3>Starting Date:</h3>
+            <p>
+                {{proposal.starting_date}}
+            </p>
+            <br>
+            <h3>Ending Date:</h3>
+            <p>
+                {{proposal.ending_date}}
+            </p>
+            <br>
+            <h3>Proposal Status:</h3>
+            <p>
+                {{proposal.proposal_status}}
+            </p>
+            <br>
+            <h3>Created Date:</h3>
+            <p>
+                {{proposal.date_created}}
+            </p>
+        </div>
+      </div>
+      {% if user.role == 'Mokytojas' %}
+      <div class="text-center">
+          <a class="btn btn-outline-success" href="/proposal/{{proposal.id}}/update">Update</a>
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+      </div>
+      {% else %}
+      <form action="#" method="POST" class="text-center">
+          <div class="form-group">
+              <label for="sel1">Select outcome:</label>
+              <select class="form-control" id="sel1" name="select">
+                <option>Approve</option>
+                <option>Reject</option>
+              </select>
+          <input type="submit" class="btn btn-outline-success mt-2" value="Confirm"></input>    
+      </form>
+      {% endif %}
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete proposal?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <form action="{{url_for('proposals.proposalDelete', proposal_id=proposal.id)}}" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

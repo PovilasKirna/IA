@@ -1,0 +1,127 @@
+{% extends 'main.html' %}
+{% block title %}Manager Proposal View{% endblock %}
+
+{% block content %}
+{% if view == 'proposals'%}
+<div class="dashbordPrasymuCards column">
+        <ul class="list-inline panel-heading text-center">
+            <li class="list-inline-item">
+                <h3 class="panel-title">
+                    Pending Proposals
+                </h3>
+            </li>
+            <li class="list-inline-item">
+                <form class="d-flex" method="POST" action="#">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                    <input class="btn btn-outline-primary btn-sm" type="submit" value="Search"></input>
+                </form>
+            </li>
+            </ul>
+        <div class="row">
+            <ul class="media-list">
+                {% for proposal in data %}
+                <li class="media card-padding">
+                    <div class="card {{proposal.proposal_status}}">
+                        <div class="card-body">
+                            <div class="m-0 pull-right mx-auto">
+                                <a href="/proposal/{{proposal.id}}" class="btn btn-outline-success btn-sm" type="button"><i
+                                        class="fa fa-edit"></i></a>
+                            </div>
+                            <dl class="row">
+                                <h5 class="card-title text-truncate"><strong>{{proposal.name}}</strong> - {{proposal.proposal_status}}</h5>
+                                
+                                <span class="card-text col-sm-3">{{proposal.starting_date}} -
+                                    {{proposal.ending_date}}</span>
+                                <span class="card-text col-sm-7 text-truncate">
+                                    {{proposal.description}}
+                                </span>
+                            </dl>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% elif view == 'events'%}
+<!-- Grid row -->
+<div class="col-xl-12 mt-4 mb-r column">
+        <ul class="list-inline panel-heading text-center">
+                <li class="list-inline-item">
+                    <h3 class="panel-title">
+                        Pending Events
+                    </h3>
+                </li>
+                <li class="list-inline-item">
+                    <form class="d-flex" method="POST" action="#">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <input class="btn btn-outline-primary btn-sm" type="submit" value="Search"></input>
+                    </form>
+                </li>
+                </ul>
+        {% for event in data %}
+            <div class="row">
+                <!--Panel-->
+                <div class="card card-body mb-3 pb-0">
+                    <div class="media d-block d-md-flex">
+                        <div class="panel panel-danger col-xl-3 ">
+                            <ul class="list-inline text-center col-xl-3" style="width: 100%; ">
+                                <li class="list-inline-item">
+                                        <div class="panel-heading month">
+                                                <div class="panel-title strong">
+                                                    <h1>{{event.starting_date.strftime('%b')}}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body day text-danger">
+                                                <h2>{{event.starting_date.day}}</h2>
+                                            </div>
+                                </li>
+                                <li class="list-inline-item">
+                                        <div class="panel-title strong">
+                                            <h1>-</h1>
+                                        </div>
+                                </li>
+                                <li class="list-inline-item">
+                                        <div class="panel-heading month">
+                                                <div class="panel-title strong">
+                                                    <h1>{{event.ending_date.strftime('%b')}}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body day text-danger">
+                                                <h2>{{event.ending_date.day}}</h2>
+                                            </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="media-body ml-2">
+                                <div class="m-0 pull-right mx-auto">
+                                        <a href="/event/{{event.id}}" class="btn btn-outline-success btn-sm" type="button"><i class="fa fa-edit"></i></a>
+                                    </div>
+                            <h4 class="media-heading fw-bold">
+                                {{event.name}}
+                            </h4>
+                            <dl class="row">
+                                <dt class="col-sm-4">Destination:</dt>
+                                <dd class="col-sm-8">{{event.destination}}</dd>
+                                
+                                <dt class="col-sm-4">Assisting person: </dt>
+                                <dd class="col-sm-8">{{event.assistant}}</dd>
+                                
+                                <dt class="col-sm-4">Class:</dt>
+                                <dd class="col-sm-8">{{event.atending_class}}</dd>
+
+                                <dt class="col-sm-4">Event Status:</dt>
+                                <dd class="col-sm-8">{{event.event_status}}</dd>
+
+                                <dt class="col-sm-4">Document:</dt>
+                                <dd class="col-sm-8"><a href="{{url_for('static', filename='documents/template.docx')}}" download>{{event.document}}</a></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor  %}
+        </div>
+{% endif %}
+{% endblock %}

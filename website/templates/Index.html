@@ -1,0 +1,168 @@
+{% extends "main.html" %}
+{% block title %} Home {% endblock %}
+{% block content %}
+
+
+<div class="dashbordPrasymuCards column">
+    <ul class="list-inline panel-heading text-center">
+        <li class="list-inline-item">
+            <h3 class="panel-title">
+                Recent Proposals
+            </h3>
+        </li>
+        <li class="list-inline-item">
+            <form class="d-flex" method="POST" action="#">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                <input class="btn btn-outline-primary btn-sm" type="submit" value="Search"></input>
+            </form>
+        </li>
+        </ul>
+    <div class="row">
+        <ul class="media-list">
+            {% for proposal in proposals %}
+            <li class="media card-padding">
+                <div class="card {{proposal.proposal_status}}">
+                    <div class="card-body">
+                        {% if proposal.proposal_status == 'Draft' %}
+                        <div class="m-0 pull-right mx-auto">
+                            <a href="/proposal/{{proposal.id}}" class="btn btn-outline-success btn-sm" type="button"><i
+                                    class="fa fa-edit"></i></a>
+                        </div>
+                        {% elif proposal.proposal_status == 'Approved' %}
+                        <ul class="list-inline m-0 pull-right mx-auto">
+                            <li class="list-inline-item">
+                                <a href="/createevent/{{proposal.get_reset_token()}}" class="btn btn-outline-primary btn-sm"
+                                    type="button"><i class="fa fa-check"></i></a>
+                            </li>
+                        </ul>
+                        {% elif proposal.proposal_status == 'Rejected' %}
+                        <ul class="list-inline m-0 pull-right mx-auto">
+                            <li class="list-inline-item">
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </li>
+                        </ul>
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Delete proposal?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                            
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <form action="{{url_for('proposals.proposalDelete', proposal_id=proposal.id)}}" method="POST">
+                                        <input class="btn btn-danger" type="submit" value="Delete">
+                                    </form>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <dl class="row">
+                            <h5 class="card-title text-truncate"><strong>{{proposal.name}}</strong> - {{proposal.proposal_status}}</h5>
+                            {% if proposal.proposal_status != 'Draft' %}
+                            <span class="card-text col-sm-3">{{proposal.starting_date.strftime('%x')}} -
+                                {{proposal.ending_date.strftime('%x')}}</span>
+                            {% else %}
+                            <span class="card-text col-sm-3">{{proposal.starting_date}} -
+                                {{proposal.ending_date}}</span>
+                            {% endif %}
+                            <span class="card-text col-sm-7 text-truncate">
+                                {{proposal.description}}
+                            </span>
+                        </dl>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="/catalog/proposals" class="btn btn-default btn-block text-center"><u>Daugiau prašymų</u></a>
+    </div>
+</div>
+
+
+<div class="dashboardEventCalendar column">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">
+                <span class="glyphicon glyphicon-calendar"></span> 
+                Event Calendar
+            </h3>
+        </div>
+        <!-- Grid row -->
+        <div class="col-xl-12 mt-4 mb-r">
+
+        {% for event in events %}
+            <div class="row">
+                <!--Panel-->
+                <div class="card card-body mb-3 pb-0">
+                    <div class="media d-block d-md-flex">
+                        <div class="panel panel-danger col-xl-3 ">
+                            <ul class="list-inline text-center col-xl-3" style="width: 100%; ">
+                                <li class="list-inline-item">
+                                        <div class="panel-heading month">
+                                                <div class="panel-title strong">
+                                                    <h1>{{event.starting_date.strftime('%b')}}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body day text-danger">
+                                                <h2>{{event.starting_date.day}}</h2>
+                                            </div>
+                                </li>
+                                <li class="list-inline-item">
+                                        <div class="panel-title strong">
+                                            <h1>-</h1>
+                                        </div>
+                                </li>
+                                <li class="list-inline-item">
+                                        <div class="panel-heading month">
+                                                <div class="panel-title strong">
+                                                    <h1>{{event.ending_date.strftime('%b')}}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body day text-danger">
+                                                <h2>{{event.ending_date.day}}</h2>
+                                            </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="media-body ml-2">
+                            <h4 class="media-heading fw-bold">
+                                {{event.name}}
+                            </h4>
+                            <dl class="row">
+                                <dt class="col-sm-4">Destination:</dt>
+                                <dd class="col-sm-8">{{event.destination}}</dd>
+                                
+                                <dt class="col-sm-4">Assisting person: </dt>
+                                <dd class="col-sm-8">{{event.assistant}}</dd>
+                                
+                                <dt class="col-sm-4">Class:</dt>
+                                <dd class="col-sm-8">{{event.atending_class}}</dd>
+
+                                <dt class="col-sm-4">Event Status:</dt>
+                                <dd class="col-sm-8">{{event.event_status}}</dd>
+
+                                <dt class="col-sm-4">Document:</dt>
+                                <dd class="col-sm-8"><a href="#">{{event.document}}</a></dd>
+                            </dl>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor  %}
+        </div>
+        <div class="text-center">
+                <a href="/catalog/events" class="btn btn-default btn-block"><u>More Events</u></a>
+        </div>
+    </div>
+</div>
+<div>
+        
+</div>
+
+{% endblock %}

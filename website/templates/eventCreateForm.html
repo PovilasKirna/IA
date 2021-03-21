@@ -1,0 +1,109 @@
+{% extends 'main.html' %}
+{% block title %}Create event{% endblock %}
+{% block content %}
+<form name="form_name1" id="form_name1" action="#" method="POST">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">{{ legend }}</legend>
+        <div class="form-group">
+            {{ form.name.label(class="form-control-label") }}
+
+            {% if form.name.errors %}
+            {{ form.name(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.name.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.name(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.starting_date.label(class="form-control-label") }}
+            {% if form.starting_date.errors %}
+            {{ form.starting_date(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.starting_date.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.starting_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.ending_date.label(class="form-control-label") }}
+            {% if form.ending_date.errors %}
+            {{ form.ending_date(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.ending_date.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.ending_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+                {{ form.teacher.label(class="form-control-label") }}
+                {% if form.teacher.errors %}
+                {{ form.teacher(class="form-select is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.teacher.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.teacher(class="form-select") }}
+                {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.assistant.label(class="form-control-label") }}
+
+            {% if form.assistant.errors %}
+            {{ form.assistant(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.assistant.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.assistant(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.destination.label(class="form-control-label") }}
+
+            {% if form.destination.errors %}
+            {{ form.destination(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.destination.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.destination(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+                {{ form.attending_class.label(class="form-control-label") }}
+                {% if form.attending_class.errors %}
+                {{ form.attending_class(class="form-select is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.attending_class.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.attending_class(class="form-select") }}
+                {% endif %}
+        </div>
+    </fieldset>
+        <div class="form-group mt-2 text-center">
+            {{ form.submit(class="btn btn-outline-info") }}
+            <a href="/" class="btn btn-outline-danger" type="button">Cancel</a>
+
+        </div>
+</form>
+{% endblock %}

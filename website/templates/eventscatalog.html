@@ -1,0 +1,32 @@
+{% extends 'main.html'%}
+{% block title %}Events Catalog{% endblock %}
+{% block content %}
+<table id="events_datatable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Teacher</th>
+            <th>Assistant</th>
+            <th>Destination</th>
+            <th>Atending class</th>
+            <th>Starting Date</th>
+            <th>Ending Date</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+                <th>id</th>
+                <th>Name</th>
+                <th>Teacher</th>
+                <th>Assistant</th>
+                <th>Destination</th>
+                <th>Atending class</th>
+                <th>Starting Date</th>
+                <th>Ending Date</th>
+                <th>Date Created</th>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}

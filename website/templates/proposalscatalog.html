@@ -1,0 +1,29 @@
+{% extends 'main.html'%}
+{% block title %}Proposals Catalog{% endblock %}
+{% block content %}
+
+<table id="proposals_datatable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Proposal Status</th>
+            <th>Starting Date</th>
+            <th>Ending Date</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Proposal Status</th>
+            <th>Starting Date</th>
+            <th>Ending Date</th>
+            <th>Date Created</th>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}
