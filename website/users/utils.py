@@ -1,9 +1,11 @@
 import secrets, os
 from flask import url_for, current_app, redirect, abort
-from .. import mail
-from flask_mail import Message
+from flask_mail import Message, Mail
 from PIL import Image
 from functools import wraps
+
+
+mail = Mail()
 
 
 def Qson(proposals):
@@ -53,34 +55,48 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
-
-def send_reset_email(user):
-    token = user.get_reset_token()
+    
+    
+def sendEmail(recipients=[], title='', email_type='', user=None):
     msg = Message(
-        'Password Reset Request', 
-        sender='noreply@demo.com',
-        recipients=[user.email]
-    )
-    
-    msg.body =f'''To reset your password, visit the following link:\n
-{url_for('users.reset_token', token=token, _external=True)}\n
-If you did not make this request then simply ignore this email and no changes will be made.
-    '''
-    
+        title,
+        sender='noreply@kjg.lt',
+        recipients=recipients
+    )   
+    if email_type == 'Password_reset':
+        token = user.get_reset_token()
+        msg.body=message_body.password_reset(token)
+        print('Sent '+email_type+' email to '+str(recipients))
+    elif email_type == 'Notify_admin_about_new_user':
+        msg.body=message_body.notify_admin_about_new_user(user)
+        print('Sent '+email_type+' email to '+str(recipients))
+    elif email_type == 'User_registered':
+        msg.body=message_body.userRegistered(user)
+        print('Sent '+email_type+' email to '+ str(recipients))
+    else:
+        abort(500)
     mail.send(msg)
-    
 
-def notify_admin_about_new_user(user, admin):
-    msg = Message(
-        'New User Registered', 
-        sender='noreply@demo.com',
-        recipients=[admin.email]
-    )
-    msg.body =f'''A new user just registered it's details:\n
+class message_body:
+    @staticmethod
+    def password_reset(token):
+        return f'''To reset your password, visit the following link:\n
+{url_for('users.reset_token', token=token, _external=True)}\n
+If you did not make this request then simply ignore this email and no changes will be made.'''
+    
+    @staticmethod
+    def notify_admin_about_new_user(user):
+        return f'''A new user just registered it's details:\n
 Full name: {user.name} {user.surname}\n
 Email: {user.email}\n
 Phone:{user.phone}\n
 
 Please register new users when you come back online.'''
     
-    mail.send(msg)
+    @staticmethod
+    def userRegistered(user):
+        return f'''Welcome {user.name} {user.surname}!\n
+    Our administrators approved your request to join. You can now login  using this link:\n
+    {url_for('users.login', _external=True)}\n
+    And start using our platform.
+    '''

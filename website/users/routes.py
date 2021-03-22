@@ -1,9 +1,9 @@
 from .forms import LoginForm, RegistrationForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
-from ..users.utils import elligible, save_picture, send_reset_email, notify_admin_about_new_user
+from ..users.utils import elligible, save_picture, sendEmail
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..models import User
+from ..models import User, Proposal, ClassEvent
 from .. import db
 
 users = Blueprint('users', __name__)
@@ -59,7 +59,12 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         admin = User.query.filter_by(role='Admin').first()
-        notify_admin_about_new_user(new_user, admin)
+        sendEmail(
+            recipients=[admin.email],
+            title='New User Registered',
+            email_type='Notify_admin_about_new_user',
+            user=new_user
+        )
         flash('Account created successfully!', category ='success')
         login_user(new_user)
         return redirect(url_for('users.registered'))  
@@ -70,6 +75,8 @@ def signup():
 @login_required
 @elligible(current_user)
 def user():
+    unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
+    unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -88,7 +95,7 @@ def user():
         form.email.data = current_user.email
         form.phone.data = current_user.phone
     profile_picture = url_for('static', filename='images/profile_pictures/'+ current_user.profile_picture)
-    return render_template('UserProfile.html', user=current_user, profile_picture=profile_picture, form=form)
+    return render_template('UserProfile.html', user=current_user, profile_picture=profile_picture, form=form, unreadevents=unreadevents, unreadproposals=unreadproposals)
     
     
 @users.route('/registered')
@@ -106,7 +113,11 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        send_reset_email(user)
+        sendEmail(
+            [user.email],
+            title='Password reset request',
+            email_type='Password_reset',
+            user=user)
         flash('An email has been sent with instructions to reset your password.', category='info')
         return redirect(url_for('users.login'))
     

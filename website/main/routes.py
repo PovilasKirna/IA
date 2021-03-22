@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, Response,request
 from ..models import Proposal,ClassEvent, Class, User
 from flask_login import login_required, current_user
-from ..users.utils import elligible
+from ..users.utils import elligible, Qson, roleRequired
 from flask_mail import Message
-from ..users.utils import Qson
 from sqlalchemy import desc,text
 from .. import db, mail
 
@@ -67,19 +66,22 @@ def sendapprovalemail(user):
     )
     
     msg.body =f'''Our administrators have determined that you fit our requirements and aproved your account you can login with the link below:\n
-{url_for('users.login', _external=True)}\n
+{url_for('users.login', _external=True)}
     '''
-    
+
     mail.send(msg)    
 
 @main.route('/ajax/proposals')
 @login_required
+#@roleRequired(current_user, 'Admin')
 def ajaxproposals():
     proposals = Proposal.query.filter_by(user_id=current_user.id)
+    print(Qson(proposals))
     return Qson(proposals)
 
 @main.route('/ajax/events')
 @login_required
+#@roleRequired(current_user, 'Admin')
 def ajaxevents():
     events = ClassEvent.query.filter_by(user_id=current_user.id)
     return Qson(events)

@@ -6,9 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin.menu import MenuLink
 from flask_mail import Mail, Message
 from .config import Config
+from website.users.utils import sendEmail, mail
 
-
-mail = Mail()
 
 db = SQLAlchemy()
 
@@ -35,6 +34,37 @@ class AdminModelView(ModelView):
     
     def inaccessible_callback(self, name, **kwargs):
         abort(403)
+        
+            
+class AdminUserModelView(ModelView):
+    def is_accessible(self):
+        if current_user.is_authenticated and (current_user.role == 'Admin' or current_user.role == 'Manager'):
+            return current_user.is_authenticated
+        else:
+            flash('You cannot access that page!', category='error')
+            self.inaccessible_callback(name='')
+    
+    def inaccessible_callback(self, name, **kwargs):
+        abort(403)
+    
+    def after_model_change(self, form, model, is_created):
+        if  not is_created:
+            if self.registered != model.registered:
+                if model.registered:
+                    sendEmail(
+                        recipients=[model.email], 
+                        title='Account approved', 
+                        email_type='User_registered', 
+                        user=model
+                    )
+
+    def edit_form(self, obj=None):
+        try:
+            self.registered = obj.registered
+        except AttributeError:
+            pass
+
+        return ModelView.edit_form(self, obj)
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -70,7 +100,7 @@ class MyAdminIndexView(AdminIndexView):
         abort(403)
 
 admin = Admin(index_view=MyAdminIndexView(), template_mode='bootstrap4')
-admin.add_view(AdminModelView(User, db.session, category='People'))
+admin.add_view(AdminUserModelView(User, db.session, category='People'))
 admin.add_view(AdminModelView(Pupil, db.session, category='People'))
 admin.add_view(AdminModelView(Parent, db.session, category='People'))
 admin.add_view(AdminModelView(Proposal, db.session))
