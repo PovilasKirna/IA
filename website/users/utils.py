@@ -81,22 +81,22 @@ class message_body:
     @staticmethod
     def password_reset(token):
         return f'''To reset your password, visit the following link:\n
-{url_for('users.reset_token', token=token, _external=True)}\n
-If you did not make this request then simply ignore this email and no changes will be made.'''
+        {url_for('users.reset_token', token=token, _external=True)}\n
+        If you did not make this request then simply ignore this email and no changes will be made.'''
     
     @staticmethod
     def notify_admin_about_new_user(user):
         return f'''A new user just registered it's details:\n
-Full name: {user.name} {user.surname}\n
-Email: {user.email}\n
-Phone:{user.phone}\n
+        Full name: {user.name} {user.surname}\n
+        Email: {user.email}\n
+        Phone:{user.phone}\n
 
-Please register new users when you come back online.'''
+        Please register new users when you come back online.'''
     
     @staticmethod
     def userRegistered(user):
         return f'''Welcome {user.name} {user.surname}!\n
-    Our administrators approved your request to join. You can now login  using this link:\n
-    {url_for('users.login', _external=True)}\n
-    And start using our platform.
-    '''
+        Our administrators approved your request to join. You can now login  using this link:\n
+        {url_for('users.login', _external=True)}\n
+        And start using our platform.
+        '''

@@ -14,18 +14,6 @@ $(document).ready(function() {
             { "data": "starting_date" },
             { "data": "ending_date" },
             { "data": "date_created" },
-            // {
-            //     data: null,
-            //     className: "dt-center editor-edit",
-            //     defaultContent: '<a href="/proposal/{"data":"id"}" class="btn btn-outline-success btn-sm" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>',
-            //     orderable: false
-            // },
-            // {
-            //     data: null,
-            //     className: "dt-center editor-delete btn",
-            //     defaultContent: '<a class="btn btn-outline-primary btn-sm" type="button"><i class="fa fa-check"></i></a>',
-            //     orderable: false
-            // }
         ]
     } );
 } );
@@ -44,18 +32,6 @@ $(document).ready(function() {
             { "data": "starting_date" },
             { "data": "ending_date" },
             { "data": "date_created" }
-            // {
-            //     data: null,
-            //     className: "dt-center editor-edit",
-            //     defaultContent: '<a class="btn btn-outline-success btn-sm" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>',
-            //     orderable: false
-            // },
-            // {
-            //     data: null,
-            //     className: "dt-center editor-delete btn",
-            //     defaultContent: '<a class="btn btn-outline-primary btn-sm" type="button"><i class="fa fa-check"></i></a>',
-            //     orderable: false
-            // }
         ]
     } );
 });

@@ -5,8 +5,6 @@ import datetime
 
 
 class NullableDateTimeField(DateTimeField):
-    """Native WTForms DateField throws error for empty dates.
-    Let's fix this so that we could have DateField nullable."""
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = ' '.join(valuelist).strip()

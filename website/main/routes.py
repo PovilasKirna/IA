@@ -73,23 +73,12 @@ def sendapprovalemail(user):
 
 @main.route('/ajax/proposals')
 @login_required
-#@roleRequired(current_user, 'Admin')
 def ajaxproposals():
     proposals = Proposal.query.filter_by(user_id=current_user.id)
-    print(Qson(proposals))
     return Qson(proposals)
 
 @main.route('/ajax/events')
 @login_required
-#@roleRequired(current_user, 'Admin')
 def ajaxevents():
     events = ClassEvent.query.filter_by(user_id=current_user.id)
     return Qson(events)
-
-# @main.route('/admin/user/edit/?id=<user_id>url=%2Fadmin%2Fuser%2F', methods=['POST'])
-# def sendRegistrationEmail(user_id):
-#     user=User.query.filter_by(id=user_id).first()
-#     print('as cia')
-#     sendapprovalemail(user)
-#     print('mums pavyko')
-#     return Response(status=200)
