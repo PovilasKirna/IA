@@ -33,8 +33,7 @@ class AdminModelView(ModelView):
             self.inaccessible_callback(name='')
     
     def inaccessible_callback(self, name, **kwargs):
-        abort(403)
-        
+        abort(403)     
             
 class AdminUserModelView(ModelView):
     def is_accessible(self):
@@ -65,7 +64,6 @@ class AdminUserModelView(ModelView):
             pass
 
         return ModelView.edit_form(self, obj)
-
 
 class MyAdminIndexView(AdminIndexView):
     def __init__(self, name=None, category=None,

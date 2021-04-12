@@ -30,7 +30,7 @@ def login():
             else:
                 flash('Incorect user details!', category='error')
         else:
-            flash('User doen\'t exist!', category='error')
+            flash('User doesn\'t exist!', category='error')
             
     return render_template('login.html', user=current_user, form=form)
 
@@ -73,7 +73,6 @@ def signup():
 
 @users.route('/user', methods=['GET', 'POST'])
 @login_required
-@elligible(current_user)
 def user():
     unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
     unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
