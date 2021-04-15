@@ -109,7 +109,7 @@ def event(event_id):
                 event.event_status = 'Approved'
                 db.session.commit()
             elif request.form['select'] == 'Reject':
-                proposal.event_status = 'Rejected'
+                event.event_status = 'Rejected'
                 db.session.commit()
             unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
             unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())

@@ -3,8 +3,8 @@
 {% block content %}
 	<form name="form_name1" id="form_name1" action="#" method="POST">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{ legend }}</legend>
+        <fieldset class="form-group form-style">
+            <legend class="border-bottom mb-4 text-center">{{ legend }}</legend>
             <div class="form-group">
                 {{ form.name.label(class="form-control-label") }}
 
@@ -60,7 +60,7 @@
                 {% endif %}
 			</div>
 		</fieldset>
-			<div class="form-group mt-2">
+			<div class="form-group mt-2 text-center">
 				{{ form.submit(class="btn btn-outline-info") }}
 			</div>
 		
