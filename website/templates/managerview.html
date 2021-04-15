@@ -108,7 +108,11 @@
                                 <dd class="col-sm-8">{{event.assistant}}</dd>
                                 
                                 <dt class="col-sm-4">Class:</dt>
-                                <dd class="col-sm-8">{{event.atending_class}}</dd>
+                                {% for class in classes %}
+                                    {% if class.id == event.atending_class %}
+                                        <dd class="col-sm-8">{{class.name}}</dd>
+                                    {% endif %}
+                                {% endfor %}    
 
                                 <dt class="col-sm-4">Event Status:</dt>
                                 <dd class="col-sm-8">{{event.event_status}}</dd>

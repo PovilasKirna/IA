@@ -3,6 +3,7 @@ from flask import url_for, current_app, redirect, abort
 from flask_mail import Message, Mail
 from PIL import Image
 from functools import wraps
+from datetime import datetime
 
 
 mail = Mail()
@@ -100,3 +101,50 @@ class message_body:
         {url_for('users.login', _external=True)}\n
         And start using our platform.
         '''
+
+def skip_lessons(starting_time, ending_time):
+    lessons_time = ['08:00', '08:55', '9:40', '10:30', '11:20', '12:10', '13:00', '13:50', '14:40']
+    starting_time = str(starting_time)
+    ending_time = str(ending_time)
+    sday = starting_time[8:starting_time.find(' ')]
+    smonth = starting_time[5:7]
+    syear = starting_time[0:starting_time.find('-')]
+    eday = ending_time[8:ending_time.find(' ')]
+    emonth = ending_time[5:7]
+    eyear = ending_time[0:ending_time.find('-')]
+    if sday != eday or smonth != emonth or syear != eyear:
+        sdate = starting_time[0:starting_time.find(' ')]
+        edate = ending_time[0:ending_time.find(' ')]
+        return '{} - {} vykstančių'.format(sdate, edate)
+    elif sday == eday:
+        stime = starting_time[starting_time.find(' '):-3]
+        sfirst = int(stime[0:stime.find(':')])
+        ssecond = int(stime[stime.find(':')+1:])
+        
+        etime = ending_time[ending_time.find(' '):-3]
+        efirst = int(etime[0:etime.find(':')])
+        esecond = int(etime[etime.find(':')+1:])
+        start_skipping_lessons = 0
+        stop_skipping_lessons = 0
+        for lesson in lessons_time:
+            lessonfirst = int(lesson[0:lesson.find(':')])
+            lessonsecond = int(lesson[lesson.find(':')+1:])
+            if lessonfirst < sfirst:
+                start_skipping_lessons+=1
+            elif lessonfirst == sfirst:
+                if lessonsecond < ssecond:
+                    start_skipping_lessons+=1
+                if lessonsecond == ssecond:
+                    start_skipping_lessons+=1
+                    
+            if lessonfirst < efirst:
+                stop_skipping_lessons+=1
+            elif lessonfirst == efirst:
+                if lessonsecond < esecond:
+                    stop_skipping_lessons+=1
+               
+        skipped_lessons = str(str(start_skipping_lessons)+ ' - '+ str(stop_skipping_lessons))
+        return skipped_lessons
+    
+if __name__ == "__main__":
+    print(skip_lessons('2021-03-16 08:00:00', '2021-03-16 22:22:00'))

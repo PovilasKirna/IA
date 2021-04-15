@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, Response,request
+from flask import Blueprint, render_template, redirect, url_for, Response, request
 from ..models import Proposal,ClassEvent, Class, User
 from flask_login import login_required, current_user
 from ..users.utils import elligible, Qson, roleRequired
@@ -32,13 +32,15 @@ def home():
         events = ClassEvent.query.filter_by(user_id=current_user.id).order_by(desc(ClassEvent.starting_date)).limit(3).all()
         unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
         unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
-        return render_template('Index.html', user=current_user, proposals=proposals, events=events, unreadproposals=unreadproposals, unreadevents=unreadevents)
+        classes = Class.query.all()
+        return render_template('Index.html', user=current_user, proposals=proposals, events=events, unreadproposals=unreadproposals, unreadevents=unreadevents, classes=classes)
     elif request.method == 'GET':
         unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
         unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
         proposals = Proposal.query.filter_by(user_id=current_user.id).order_by(desc(Proposal.date_created)).limit(6).all()
+        classes = Class.query.all()
         events = ClassEvent.query.filter_by(user_id=current_user.id).order_by(desc(ClassEvent.starting_date)).limit(3).all()
-    return render_template('Index.html', user=current_user, proposals=proposals, events=events, unreadproposals=unreadproposals, unreadevents=unreadevents)
+    return render_template('Index.html', user=current_user, proposals=proposals, events=events, unreadproposals=unreadproposals, unreadevents=unreadevents, classes=classes)
 
     
 @main.route("/catalog/proposals")

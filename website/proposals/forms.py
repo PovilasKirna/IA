@@ -12,7 +12,7 @@ class NullableDateTimeField(DateTimeField):
                 self.data = None
                 return
             try:
-                self.data = datetime.datetime.strptime(date_str, self.format).date()
+                self.data = datetime.datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
                 raise ValueError(self.gettext('Not a valid date value'))
@@ -27,7 +27,7 @@ class ProposalForm(FlaskForm):
             DataRequired()
         ]
     )
-    starting_date = NullableDateTimeField('Starting Date', format='%Y-%m-%d %H:%M')
-    ending_date = NullableDateTimeField('Ending Date', format='%Y-%m-%d %H:%M')
+    starting_date = NullableDateTimeField('Starting Date', format='%Y-%m-%d %H:%M:%S')
+    ending_date = NullableDateTimeField('Ending Date', format='%Y-%m-%d %H:%M:%S')
     submit = SubmitField('Send')
 

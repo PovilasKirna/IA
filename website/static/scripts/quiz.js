@@ -18,7 +18,7 @@ $(document).ready(function() {
     } );
 } );
 
-//ajax datatables for proposals
+//ajax datatables for events
 $(document).ready(function() {
     $('#events_datatable').DataTable( {
         "ajax": "/ajax/events",
@@ -31,6 +31,8 @@ $(document).ready(function() {
             { "data": "atending_class" },
             { "data": "starting_date" },
             { "data": "ending_date" },
+            { "data": "starting_location" },
+            { "data": "ending_location" },
             { "data": "date_created" }
         ]
     } );

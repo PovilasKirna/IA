@@ -50,6 +50,9 @@ class Proposal(db.Model):
         except:
             return None
         return Proposal.query.get(proposal_id)
+    
+    def __repr__(self):
+        return '<Proposal {}>'.format(self.name)
 
 class User(db.Model, UserMixin):
     
@@ -199,6 +202,9 @@ class ClassEvent(db.Model):
         db.Integer,
         db.ForeignKey('user.id')
     )
+    
+    def __repr__(self):
+        return '<Event {}>'.format(self.name)
 
 class Parent(db.Model):
     id = db.Column(
@@ -266,6 +272,9 @@ class Pupil(db.Model):
         db.ForeignKey('class.id')
     )
     
+    def __repr__(self):
+        return '<Student {}, {} {}>'.format(self.pupilCode, self.name, self.surname)
+    
 class Class(db.Model):
     id = db.Column(
         db.Integer,
@@ -275,4 +284,8 @@ class Class(db.Model):
         db.String(50),
         nullable=False
     )
+    
     pupils = db.relationship('Pupil')
+    
+    def __repr__(self):
+        return '<Class {}>' % (self.name)

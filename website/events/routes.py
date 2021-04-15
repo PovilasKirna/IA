@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
 from ..models import Class, User, ClassEvent, Proposal
 from flask_login import login_required, current_user
-from ..users.utils import elligible
+from ..users.utils import elligible, skip_lessons
 from .forms import ClassEventForm
 from sqlalchemy import func, text
 from .. import db
@@ -26,16 +26,24 @@ def createclassevent(token):
         form.attending_class.choices = [(c.id, c.name) for c in Class.query.order_by(Class.name)]
         form.teacher.choices = [(t.id, (t.name+' '+t.surname)) for t in User.query.order_by(User.name, User.surname).filter_by(role='Mokytojas')]
         if form.validate_on_submit():
+            #generate a document
             event = ClassEvent(
                 name=form.name.data,
                 starting_date=form.starting_date.data,
                 ending_date=form.ending_date.data,
+                starting_location=form.starting_location.data,
+                ending_location=form.ending_location.data,
                 assistant=form.assistant.data, 
+                route=form.route.data,
+                goal=form.goal.data,
+                event_content=form.event_content.data,
+                skipped_lessons = skip_lessons(form.starting_date.data, form.ending_date.data),
                 destination=form.destination.data, 
                 atending_class=form.attending_class.data,
                 teacher=form.teacher.data,
                 user_id=current_user.id,
                 date_created=func.now()
+                #documentas = katik sugeneruotas dokas. 
             )
             db.session.add(event)
             db.session.delete(proposal)
@@ -78,13 +86,15 @@ def managerproposalview():
         unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
         unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
         view = 'events'
-        return render_template('managerview.html', user=current_user, view=view, data=events, unreadevents=unreadevents, unreadproposals=unreadproposals)
+        classes = Class.query.all()
+        return render_template('managerview.html', user=current_user, view=view, data=events, unreadevents=unreadevents, unreadproposals=unreadproposals, classes=classes)
     
     unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
     unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
     view = 'events'
     events = ClassEvent.query.filter_by(event_status='Pending').all()
-    return render_template('managerview.html', user=current_user, view=view, data=events, unreadevents=unreadevents, unreadproposals=unreadproposals)
+    classes = Class.query.all()
+    return render_template('managerview.html', user=current_user, view=view, data=events, unreadevents=unreadevents, unreadproposals=unreadproposals, classes=classes)
 
 @events.route('/event/<event_id>', methods=['GET', 'POST'])
 @login_required
@@ -107,4 +117,5 @@ def event(event_id):
  
         unreadproposals = len(Proposal.query.filter_by(proposal_status='pending').all())
         unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
-        return render_template('event.html', user=current_user, event=event, unreadevents=unreadevents, unreadproposals=unreadproposals)
+        classes = Class.query.all()
+        return render_template('event.html', user=current_user, event=event, unreadevents=unreadevents, unreadproposals=unreadproposals, classes=classes)

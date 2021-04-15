@@ -31,7 +31,11 @@
             </p>
             <h3>Attending_class:</h3>
             <p>
-                {{event.attending_class}}
+                {% for class in classes %}
+                    {% if class.id == event.atending_class %}
+                        {{class.name}}
+                    {% endif %}
+                {% endfor %}
             </p>
             <h3>Event Status:</h3>
             <p>

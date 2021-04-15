@@ -43,7 +43,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.starting_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM") }}
+                {{ form.starting_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM:SS") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -56,7 +56,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.ending_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM") }}
+                {{ form.ending_date(class="form-control form-control-lg", placeholder="YYYY-MM-DD HH:MM:SS") }}
                 {% endif %}
 			</div>
 		</fieldset>
