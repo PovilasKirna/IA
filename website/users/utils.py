@@ -142,8 +142,9 @@ def skip_lessons(starting_time, ending_time):
             elif lessonfirst == efirst:
                 if lessonsecond < esecond:
                     stop_skipping_lessons+=1
-               
-        skipped_lessons = str(str(start_skipping_lessons)+ ' - '+ str(stop_skipping_lessons))
+        
+        sdate = starting_time[0:starting_time.find(' ')]
+        skipped_lessons = str(str(sdate) + ' ' + str(start_skipping_lessons) + '-' + str(stop_skipping_lessons))
         return skipped_lessons
     
 if __name__ == "__main__":

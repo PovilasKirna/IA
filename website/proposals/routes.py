@@ -18,7 +18,6 @@ def createnew():
     unreadevents = len(ClassEvent.query.filter_by(event_status='pending').all())
     if form.validate_on_submit():
         if form.starting_date.data and form.ending_date.data:
-            print(form.starting_date.data)
             proposal = Proposal(
                 name=form.name.data, 
                 description=form.description.data, 

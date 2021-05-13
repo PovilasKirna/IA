@@ -10,7 +10,7 @@ from ..models import ClassEvent, User
 class ClassEventForm(FlaskForm):
     name = StringField('Name', validators=[
             DataRequired(),
-            Length(min=2, max=20)
+            Length(min=2, max=100)
         ]
     )
     starting_date = DateTimeField('Starting Date', format='%Y-%m-%d %H:%M:%S', validators=[

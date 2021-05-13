@@ -4,7 +4,9 @@ from flask_login import login_required, current_user
 from ..users.utils import elligible, skip_lessons
 from .forms import ClassEventForm
 from sqlalchemy import func, text
+from datetime import datetime
 from .. import db
+from ..createeventdocument import CreateEventDocument
 
 events=Blueprint('events', __name__)
 
@@ -26,7 +28,32 @@ def createclassevent(token):
         form.attending_class.choices = [(c.id, c.name) for c in Class.query.order_by(Class.name)]
         form.teacher.choices = [(t.id, (t.name+' '+t.surname)) for t in User.query.order_by(User.name, User.surname).filter_by(role='Mokytojas')]
         if form.validate_on_submit():
-            #generate a document
+            teacher=form.teacher.data
+            teacher=User.query.filter_by(id=teacher).first()
+            teacher=str(teacher.name)+ ' ' +str(teacher.surname)
+            atending_class=form.attending_class.data
+            atending_class = Class.query.filter_by(id=atending_class).first()
+            pupils = atending_class.pupils
+            x = datetime.now()
+            
+            doc = CreateEventDocument(teacher=teacher, 
+                                date=str(x.strftime("%Y-%m-%d")), 
+                                destination=form.destination.data, 
+                                event_name=form.name.data, 
+                                starting_date=str(form.starting_date.data),
+                                ending_date=str(form.ending_date.data),
+                                starting_location=form.starting_location.data,
+                                ending_location=form.ending_location.data,
+                                pupil_count=str(len(pupils)),
+                                route=form.route.data,
+                                goal=form.goal.data,
+                                event_content=form.event_content.data,
+                                pupil_list=pupils,
+                                skipped_lessons=skip_lessons(form.starting_date.data, form.ending_date.data),
+            )
+            name = teacher+'_'+str(x.strftime('%c'))
+            path = '/Users/Povilas/Desktop/Flask_Web_App/website/static/documents/'+name+'.docx'
+            doc.save(path)
             event = ClassEvent(
                 name=form.name.data,
                 starting_date=form.starting_date.data,
@@ -42,8 +69,8 @@ def createclassevent(token):
                 atending_class=form.attending_class.data,
                 teacher=form.teacher.data,
                 user_id=current_user.id,
-                date_created=func.now()
-                #documentas = katik sugeneruotas dokas. 
+                date_created=func.now(),
+                document=name+'.docx'
             )
             db.session.add(event)
             db.session.delete(proposal)
