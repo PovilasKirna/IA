@@ -9,8 +9,8 @@ import os
 
 class CreateEventDocument():
     
-    def __init__(self, teacher='', date='', destination='', event_name='', starting_date='', ending_date='', starting_location='', ending_location='', pupil_count='', route='', goal='', event_content='', pupil_list=[], skipped_lessons=''):
-        self.document = Document('/Users/Povilas/Desktop/Flask_Web_App/website/template.docx')
+    def __init__(self, teacher='', date='', destination='', event_name='', starting_date='', ending_date='', starting_location='', ending_location='', pupil_count='', route='', goal='', event_content='', pupil_list=['', '', ''], skipping_lesson_date='', skipped_lessons=''):
+        self.document = Document('website/static/documents/template.docx')
         self.document.save('eventform_clone.docx')
         self.document = Document('eventform_clone.docx')
         self.font = self.document.styles['Normal'].font
@@ -68,23 +68,22 @@ class CreateEventDocument():
                 paragraphs[index].add_run(event_content)
             elif index==28:
                 table = self.document.tables
-                                 
+                data = pupil_list 
+                
                 row = table[0].rows[0].cells
                 row[0].text = 'Vardas'
                 row[1].text = 'Pavardė'
-                row[2].text = 'Kodas'
-
+                row[2].text = 'Klasė'
                 
-                for pupil in pupil_list: 
+                for name, surname, classname in data: 
                     row = table[0].add_row().cells
-                    print(pupil.name, pupil.surname, pupil.pupilCode)
-                    row[0].text = pupil.name
-                    row[1].text = pupil.surname
-                    row[2].text = pupil.pupilCode
+                    row[0].text = name
+                    row[1].text = surname
+                    row[2].text = classname
             elif index==31:
                 paragraphs[index].clear()
                 paragraphs[index].add_run('10. Prašau mokinius atleisti iš ')
-                paragraphs[index].add_run(skipped_lessons+' pamokos(-ų).')
+                paragraphs[index].add_run(skipping_lesson_date+'  '+skipped_lessons+' pamokos(-ų).')
             elif index==34:
                 paragraphs[index].clear()
                 paragraphs[index].add_run('\t\t       Grupės vadovas ')
@@ -109,7 +108,8 @@ if __name__ == "__main__":
         route='Kaunas-Zapyskis',
         goal='Nuvaziuoti',
         event_content='Kelias',
-        pupil_list=[('Povilas', 'Kirna', 'IB2', '')],
+        pupil_list=[('Povilas', 'Kirna', 'IB2'), ('Mykolas', 'Zilinskas', 'IB2'), ('Benas', 'Valatka', 'IB2'), ('Povilas', 'Kirna', 'IB2'), ('Povilas', 'Kirna', 'IB2')],
+        skipping_lesson_date='2021-03-19',
         skipped_lessons='1-8',
     )
     user, date = 'PovilasKirna', '2021.03.19' 

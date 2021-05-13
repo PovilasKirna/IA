@@ -77,15 +77,10 @@ def sendapprovalemail(user):
 @login_required
 def ajaxproposals():
     proposals = Proposal.query.filter_by(user_id=current_user.id)
-    if current_user.role == 'Admin':
-        proposals = Proposal.query.all()
     return Qson(proposals)
 
 @main.route('/ajax/events')
 @login_required
 def ajaxevents():
-    if current_user.role != 'Admin' and current_user.role != 'Manager':
-        events = ClassEvent.query.filter_by(user_id=current_user.id)
-    else:
-        events = ClassEvent.query.all()
+    events = ClassEvent.query.filter_by(user_id=current_user.id)
     return Qson(events)
